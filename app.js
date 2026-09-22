@@ -334,6 +334,12 @@ $("#newBtn").onclick = () => {
   save();
   renderLibrary();
 };
+$("#clearBtn").onclick = () => {
+  if (!confirm("Wyczyścić bieżący formularz? Niezapisane w nim zmiany zostaną utracone.")) return;
+  loadDocIntoEditor({ kicker: "Instrukcja krok po kroku", title: "", intro: "", steps: [] });
+  addStep();
+  save();
+};
 
 load();
 
