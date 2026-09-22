@@ -116,6 +116,7 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .image-controls { display:grid; grid-template-columns:1fr auto auto auto; gap:6px; }
 .image-controls button { border:0; border-radius:7px; padding:7px 9px; background:#f0f3f6; color:#536172; }
 .add-more-images { margin-top:10px; width:100%; text-align:center; }
+.add-more-hint { display:block; text-align:center; margin-top:7px; color:#9aa5b1; font-size:11px; }
 .special-row { margin-top:10px; display:grid; grid-template-columns:1fr; gap:6px; }
 .callout-text { display:block; }
 .clear-callout { width:max-content; border:0; background:none; color:#a25750; font-size:11px; padding:0; }

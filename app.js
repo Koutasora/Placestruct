@@ -91,6 +91,7 @@ function updateImageVisibility(stepNode) {
   const has = $$(".image-entry", stepNode).length > 0;
   $(".image-placeholder", stepNode).hidden = has;
   $(".add-more-images", stepNode).hidden = !has;
+  $(".add-more-hint", stepNode).hidden = !has;
 }
 
 function addImageFromFile(stepNode, file) {
