@@ -181,7 +181,7 @@ function buildDocHtml(d) {
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
       ${s.text ? `<p class="preview-text">${esc(s.text)}</p>` : ""}
-      ${(s.images && s.images.length) ? `<div class="step-images">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
+      ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;
   });
