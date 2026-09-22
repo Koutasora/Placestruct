@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Placestruct</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">▤</div>
+      <div>
+        <strong>Placestruct</strong>
+        <span>Proste, czytelne instrukcje</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="ghost theme-btn" id="themeBtn">☾ Ciemny</button><button class="ghost" id="newBtn">Nowa</button>
+      <button class="primary" id="printBtn">🖨 Drukuj</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="editor">
+      <div class="panel-title">
+        <div>
+          <span class="eyebrow">EDYTOR</span>
+          <h1>Twoja instrukcja</h1>
+        </div>
+        <span class="save-state" id="saveState">Zapisano</span>
+      </div>
+
+      <section class="library-section" id="librarySection" hidden>
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">ZAPISANE</span>
+            <h2>Poprzednie instrukcje</h2>
+          </div>
+        </div>
+        <div id="libraryList" class="library-list"></div>
+      </section>
+
+      <section class="form-section">
+        <label>Etykieta nad tytułem <span>(opcjonalnie)</span></label>
+        <input id="docKicker" value="Instrukcja krok po kroku" placeholder="Np. Instrukcja krok po kroku">
+
+        <label>Tytuł instrukcji</label>
+        <input id="docTitle" value="Jak zmienić hasło Wi-Fi" placeholder="Np. Jak zmienić hasło Wi-Fi">
+
+        <label>Krótki opis <span>(opcjonalnie)</span></label>
+        <textarea id="docIntro" rows="3" placeholder="Jedno lub dwa zdania wyjaśniające, czego dotyczy instrukcja.">Instrukcja krok po kroku dla osób, które po raz pierwszy wykonują tę czynność.</textarea>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">KROKI</span>
+            <h2>Treść instrukcji</h2>
+          </div>
+          <button class="small-add" id="addStepBtn">＋ Krok</button>
+        </div>
+        <div id="steps"></div>
+      </section>
+    </aside>
+
+    <section class="preview-area">
+      <div class="preview-toolbar">
+        <span>Podgląd dokumentu</span>
+        <span class="a4-badge">A4 · podgląd druku</span>
+      </div>
+      <div class="paper-wrap">
+        <article class="paper" id="paper"></article>
+      </div>
+    </section>
+  </main>
+
+  <template id="stepTemplate">
+    <div class="step-card">
+      <div class="step-head">
+        <div class="step-number"></div>
+        <input class="step-title" placeholder="Tytuł kroku">
+        <button class="icon-btn move-up" title="Przenieś wyżej">↑</button>
+        <button class="icon-btn move-down" title="Przenieś niżej">↓</button>
+        <button class="icon-btn delete-step" title="Usuń krok">×</button>
+      </div>
+      <textarea class="step-text" rows="4" placeholder="Opisz krótko, co użytkownik ma zrobić..."></textarea>
+
+      <div class="image-box">
+        <input class="image-input" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        <div class="image-placeholder">
+          <button class="upload-btn">＋ Dodaj zdjęcie</button>
+          <small>PNG, JPG lub WebP</small>
+        </div>
+        <div class="image-preview" hidden>
+          <img>
+          <div class="image-controls">
+            <input class="caption-input" placeholder="Podpis zdjęcia (opcjonalnie)">
+            <button class="change-image">Zmień</button>
+            <button class="remove-image">Usuń</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="special-row">
+        <select class="callout-type">
+          <option value="">＋ Dodaj wyróżnienie</option>
+          <option value="tip">💡 Wskazówka</option>
+          <option value="warning">⚠️ Uwaga</option>
+          <option value="info">ℹ️ Informacja</option>
+          <option value="important">❗ Ważne</option>
+        </select>
+        <input class="callout-text" placeholder="Treść wyróżnienia..." hidden>
+        <button class="clear-callout" hidden>Usuń</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
