@@ -389,14 +389,26 @@ const BADGE_COLOR_KEY = "placestruct-badge-color";
 const BADGE_SHAPE_KEY = "placestruct-badge-shape";
 const DEFAULT_BADGE_COLOR = "#2563eb";
 const DEFAULT_BADGE_SHAPE = "square";
-const SHAPE_RADIUS = { square: "9px", rounded: "16px", circle: "50%" };
+const SHAPES = {
+  square:   { radius: "9px",  clip: "none" },
+  rounded:  { radius: "16px", clip: "none" },
+  circle:   { radius: "50%",  clip: "none" },
+  diamond:  { radius: "0",    clip: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)" },
+  hexagon:  { radius: "0",    clip: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" },
+  pentagon: { radius: "0",    clip: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)" },
+  octagon:  { radius: "0",    clip: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)" },
+  star:     { radius: "0",    clip: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" },
+  triangle: { radius: "0",    clip: "polygon(50% 0%, 0% 100%, 100% 100%)" }
+};
 
 function applyBadgeColor(color) {
   document.documentElement.style.setProperty("--badge-color", color);
   $("#badgeColorInput").value = color;
 }
 function applyBadgeShape(shape) {
-  document.documentElement.style.setProperty("--badge-radius", SHAPE_RADIUS[shape] || SHAPE_RADIUS[DEFAULT_BADGE_SHAPE]);
+  const s = SHAPES[shape] || SHAPES[DEFAULT_BADGE_SHAPE];
+  document.documentElement.style.setProperty("--badge-radius", s.radius);
+  document.documentElement.style.setProperty("--badge-clip", s.clip);
   $$(".shape-btn").forEach(b => b.classList.toggle("active", b.dataset.shape === shape));
 }
 

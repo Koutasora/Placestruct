@@ -11,6 +11,7 @@
   --danger: #c0392b;
   --badge-color: #2563eb;
   --badge-radius: 9px;
+  --badge-clip: none;
 }
 html, body { margin: 0; min-height: 100%; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
 button, input, textarea, select { font: inherit; }
@@ -35,9 +36,19 @@ button { cursor: pointer; }
 .customize-panel label { margin:6px 0 0; }
 .customize-panel label:first-child { margin-top:0; }
 .customize-panel input[type="color"] { padding:2px; height:36px; cursor:pointer; }
-.shape-options { display:flex; gap:6px; }
-.shape-btn { flex:1; border:1px solid #d6dde5; background:white; border-radius:8px; padding:7px 0; font-size:15px; color:#596777; }
+.shape-options { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; }
+.shape-btn { border:1px solid #d6dde5; background:white; border-radius:8px; padding:9px 0; color:#596777; display:flex; align-items:center; justify-content:center; }
 .shape-btn.active { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
+.shape-preview { width:16px; height:16px; background:currentColor; display:block; }
+.shape-btn[data-shape="square"] .shape-preview { border-radius:3px; }
+.shape-btn[data-shape="rounded"] .shape-preview { border-radius:6px; }
+.shape-btn[data-shape="circle"] .shape-preview { border-radius:50%; }
+.shape-btn[data-shape="diamond"] .shape-preview { clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+.shape-btn[data-shape="hexagon"] .shape-preview { clip-path:polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+.shape-btn[data-shape="pentagon"] .shape-preview { clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+.shape-btn[data-shape="octagon"] .shape-preview { clip-path:polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); }
+.shape-btn[data-shape="star"] .shape-preview { clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.shape-btn[data-shape="triangle"] .shape-preview { clip-path:polygon(50% 0%, 0% 100%, 100% 100%); }
 .reset-badge-btn { margin-top:8px; width:100%; text-align:center; padding:7px 0; font-size:12px; }
 .ghost, .primary, .small-add, .upload-btn { border:0; border-radius:9px; padding:9px 14px; font-weight:650; }
 .ghost { background:#f3f5f7; color:#354252; }
@@ -80,7 +91,7 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .small-add { color:var(--accent); background:var(--accent-soft); padding:7px 10px; }
 .step-card { background:white; border:1px solid var(--line); border-radius:12px; padding:13px; margin-bottom:12px; box-shadow:0 1px 2px #17203308; }
 .step-head { display:grid; grid-template-columns:31px 1fr 30px 30px 30px; gap:6px; align-items:center; margin-bottom:10px; }
-.step-number { width:29px; height:29px; border-radius:var(--badge-radius); background:#edf2f7; display:grid; place-items:center; font-weight:800; font-size:12px; color:#556272; }
+.step-number { width:29px; height:29px; border-radius:var(--badge-radius); clip-path:var(--badge-clip); background:#edf2f7; display:grid; place-items:center; font-weight:800; font-size:12px; color:#556272; }
 .step-title { padding:7px 9px; font-weight:700; }
 .icon-btn { border:0; background:#f3f5f7; color:#596777; border-radius:7px; width:30px; height:30px; font-weight:700; }
 .icon-btn:hover { background:#e8edf2; }
@@ -112,7 +123,7 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .paper-intro { color:#667382; font-size:14px; line-height:1.65; max-width:610px; margin:0; }
 .preview-step { break-inside:avoid; page-break-inside:avoid; margin-bottom:32px; }
 .preview-step-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:8px; }
-.preview-num { flex:0 0 34px; height:34px; border-radius:var(--badge-radius); background:var(--badge-color); color:white; display:grid; place-items:center; font-size:12px; font-weight:850; }
+.preview-num { flex:0 0 34px; height:34px; border-radius:var(--badge-radius); clip-path:var(--badge-clip); background:var(--badge-color); color:white; display:grid; place-items:center; font-size:12px; font-weight:850; }
 .preview-step h4 { margin:2px 0 0; font-size:18px; line-height:1.3; }
 .preview-text { margin:0 0 13px 48px; white-space:pre-wrap; color:#3f4b58; font-size:13.5px; line-height:1.7; }
 .preview-image { margin:15px 0 7px 48px; break-inside:avoid; }
