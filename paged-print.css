@@ -15,4 +15,4 @@
 
 .pagedoc-title { string-set: doctitle content(); }
 .pagedoc + .pagedoc { break-before: page; }
-.preview-image img { max-height: 190mm; }
+.preview-image img { max-height: 110mm; }
