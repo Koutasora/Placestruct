@@ -22,13 +22,13 @@ const starter = [
   }
 ];
 
-function addStep(data={title:"", text:"", image:null, caption:"", callout:null}) {
+function addStep(data={title:"", text:"", image:null, caption:"", scale:100, callout:null}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
   $(".step-title", node).value = data.title || "";
   $(".step-text", node).value = data.text || "";
 
-  if (data.image) setImage(node, data.image, data.caption || "");
+  if (data.image) setImage(node, data.image, data.caption || "", data.scale || 100);
 
   if (data.callout) {
     $(".callout-type", node).value = data.callout.type;
@@ -49,6 +49,10 @@ function addStep(data={title:"", text:"", image:null, caption:"", callout:null})
     if (file) readImage(node, file);
   };
   $(".change-image", node).onclick = () => $(".image-input", node).click();
+  $(".scale-input", node).oninput = () => {
+    $(".scale-value", node).textContent = `${$(".scale-input", node).value}%`;
+    render(); save();
+  };
   $(".remove-image", node).onclick = () => {
     node.querySelector(".image-preview").hidden = true;
     node.querySelector(".image-placeholder").hidden = false;
@@ -95,15 +99,17 @@ function readImage(node, file) {
   if (!file.type.startsWith("image/")) return;
   const reader = new FileReader();
   reader.onload = () => {
-    setImage(node, reader.result, $(".caption-input", node).value);
+    setImage(node, reader.result, $(".caption-input", node).value, $(".scale-input", node).value);
     render(); save();
   };
   reader.readAsDataURL(file);
 }
 
-function setImage(node, src, caption="") {
+function setImage(node, src, caption="", scale=100) {
   $(".image-preview img", node).src = src;
   $(".caption-input", node).value = caption;
+  $(".scale-input", node).value = scale;
+  $(".scale-value", node).textContent = `${scale}%`;
   $(".image-preview", node).hidden = false;
   $(".image-placeholder", node).hidden = true;
 }
@@ -122,6 +128,7 @@ function collect() {
       text: $(".step-text", node).value.trim(),
       image: $(".image-preview", node).hidden ? null : $(".image-preview img", node).src,
       caption: $(".caption-input", node).value.trim(),
+      scale: Number($(".scale-input", node).value) || 100,
       callout: $(".callout-type", node).value ? {
         type: $(".callout-type", node).value,
         text: $(".callout-text", node).value.trim()
@@ -148,7 +155,7 @@ function buildDocHtml(d) {
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
       ${s.text ? `<p class="preview-text">${esc(s.text)}</p>` : ""}
-      ${s.image ? `<figure class="preview-image"><img src="${s.image}" alt="">${s.caption ? `<figcaption class="image-caption">${esc(s.caption)}</figcaption>` : ""}</figure>` : ""}
+      ${s.image ? `<figure class="preview-image"><img src="${s.image}" alt="" style="width:${s.scale || 100}%">${s.caption ? `<figcaption class="image-caption">${esc(s.caption)}</figcaption>` : ""}</figure>` : ""}
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;
   });
