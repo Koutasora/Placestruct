@@ -116,7 +116,18 @@
         <button class="icon-btn move-down" title="Przenieś niżej">↓</button>
         <button class="icon-btn delete-step" title="Usuń krok">×</button>
       </div>
-      <textarea class="step-text" rows="4" placeholder="Opisz krótko, co użytkownik ma zrobić..."></textarea>
+      <div class="text-toolbar">
+        <button type="button" class="fmt-btn" data-cmd="bold" title="Pogrubienie"><b>B</b></button>
+        <button type="button" class="fmt-btn" data-cmd="italic" title="Kursywa"><i>I</i></button>
+        <span class="fmt-divider"></span>
+        <button type="button" class="color-swatch" data-color="#3f4b58" title="Domyślny" style="background:#3f4b58"></button>
+        <button type="button" class="color-swatch" data-color="#c0392b" title="Czerwony" style="background:#c0392b"></button>
+        <button type="button" class="color-swatch" data-color="#b8860b" title="Pomarańczowy" style="background:#b8860b"></button>
+        <button type="button" class="color-swatch" data-color="#3f9153" title="Zielony" style="background:#3f9153"></button>
+        <button type="button" class="color-swatch" data-color="#2563eb" title="Niebieski" style="background:#2563eb"></button>
+        <button type="button" class="color-swatch" data-color="#7c3aed" title="Fioletowy" style="background:#7c3aed"></button>
+      </div>
+      <div class="step-text" contenteditable="true" data-placeholder="Opisz krótko, co użytkownik ma zrobić..."></div>
 
       <div class="image-box">
         <input class="image-input" type="file" accept="image/png,image/jpeg,image/webp" hidden multiple>

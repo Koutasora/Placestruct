@@ -27,7 +27,7 @@ function addStep(data={title:"", text:"", images:[], callout:null}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
   $(".step-title", node).value = data.title || "";
-  $(".step-text", node).value = data.text || "";
+  $(".step-text", node).innerHTML = data.text || "";
 
   const imageListEl = $(".image-list", node);
   const images = data.images || (data.image ? [{ src: data.image, caption: data.caption || "", scale: data.scale || 100 }] : []);
@@ -84,6 +84,27 @@ function addStep(data={title:"", text:"", images:[], callout:null}) {
 
   $$(".step-title, .step-text, .callout-text", node).forEach(el => {
     el.addEventListener("input", () => { render(); save(); });
+  });
+
+  const stepTextEl = $(".step-text", node);
+  stepTextEl.addEventListener("paste", e => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+    document.execCommand("insertText", false, text);
+  });
+  $$(".fmt-btn", node).forEach(btn => {
+    btn.addEventListener("mousedown", e => e.preventDefault());
+    btn.addEventListener("click", () => {
+      document.execCommand(btn.dataset.cmd, false, null);
+      render(); save();
+    });
+  });
+  $$(".color-swatch", node).forEach(btn => {
+    btn.addEventListener("mousedown", e => e.preventDefault());
+    btn.addEventListener("click", () => {
+      document.execCommand("foreColor", false, btn.dataset.color);
+      render(); save();
+    });
   });
 
   stepsEl.appendChild(node);
@@ -149,7 +170,7 @@ function collect() {
     intro: $("#docIntro").value.trim(),
     steps: $$(".step-card").map(node => ({
       title: $(".step-title", node).value.trim(),
-      text: $(".step-text", node).value.trim(),
+      text: $(".step-text", node).innerHTML.trim(),
       images: $$(".image-entry", node).map(entry => ({
         src: $("img", entry).src,
         caption: $(".caption-input", entry).value.trim(),
@@ -180,7 +201,7 @@ function buildDocHtml(d) {
         <div class="preview-num">${String(i+1).padStart(2,"0")}</div>
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
-      ${s.text ? `<p class="preview-text">${esc(s.text)}</p>` : ""}
+      ${s.text ? `<div class="preview-text">${s.text}</div>` : ""}
       ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;

@@ -103,9 +103,22 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .step-head { display:grid; grid-template-columns:31px 1fr 30px 30px 30px 30px; gap:6px; align-items:center; margin-bottom:10px; }
 .toggle-step { transition:.15s transform; }
 .step-card.collapsed .step-head { margin-bottom:0; }
+.step-card.collapsed .text-toolbar,
 .step-card.collapsed .step-text,
 .step-card.collapsed .image-box,
 .step-card.collapsed .special-row { display:none; }
+.text-toolbar { display:flex; align-items:center; gap:5px; margin-bottom:7px; flex-wrap:wrap; }
+.fmt-btn { width:28px; height:28px; border:1px solid #d6dde5; background:white; border-radius:6px; font-size:13px; color:#354252; padding:0; }
+.fmt-btn:hover { background:#eef1f5; }
+.fmt-divider { width:1px; height:18px; background:#d6dde5; margin:0 2px; }
+.color-swatch { width:20px; height:20px; border-radius:50%; border:2px solid white; box-shadow:0 0 0 1px #d6dde5; padding:0; }
+.color-swatch:hover { box-shadow:0 0 0 1px #a8b2bd; }
+.step-text[contenteditable] {
+  width:100%; min-height:84px; border:1px solid #d6dde5; border-radius:8px; background:white; color:var(--ink);
+  padding:10px 11px; outline:none; line-height:1.5; margin-bottom:16px; transition:.15s border, .15s box-shadow;
+}
+.step-text[contenteditable]:focus { border-color:#8eb0f6; box-shadow:0 0 0 3px #2563eb12; }
+.step-text[contenteditable]:empty:before { content:attr(data-placeholder); color:#9aa5b1; }
 .step-number { width:29px; height:29px; border-radius:var(--badge-radius); clip-path:var(--badge-clip); background:#edf2f7; display:grid; place-items:center; font-weight:800; font-size:12px; color:#556272; }
 .step-title { padding:7px 9px; font-weight:700; }
 .icon-btn { border:0; background:#f3f5f7; color:#596777; border-radius:7px; width:30px; height:30px; font-weight:700; }
@@ -194,6 +207,11 @@ body.dark {
 body.dark .topbar, body.dark .editor { background:#151b23; }
 body.dark .steps-section .section-heading { background:#151b23; }
 body.dark input, body.dark textarea, body.dark select { background:#1b222b; color:#edf2f7; border-color:#354252; }
+body.dark .step-text[contenteditable] { background:#1b222b; color:#edf2f7; border-color:#354252; }
+body.dark .step-text[contenteditable]:empty:before { color:#66707c; }
+body.dark .fmt-btn { background:#232c37; color:#d8e0e8; border-color:#354252; }
+body.dark .fmt-divider { background:#354252; }
+body.dark .color-swatch { border-color:#1b222b; box-shadow:0 0 0 1px #354252; }
 body.dark .ghost, body.dark .icon-btn, body.dark .upload-btn { background:#232c37; color:#d8e0e8; }
 body.dark .step-card { background:#1b222b; border-color:#303b48; }
 body.dark .library-item { background:#1b222b; border-color:#303b48; }
