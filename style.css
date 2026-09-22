@@ -197,6 +197,7 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
 @media print {
   @page { size:A4; margin:0; }
   html, body { background:white; }
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
   .topbar, .editor, .preview-toolbar { display:none !important; }
   .workspace { display:block; height:auto; }
   .preview-area { padding:0; overflow:visible; }
