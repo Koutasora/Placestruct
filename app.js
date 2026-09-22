@@ -53,6 +53,10 @@ function addStep(data={title:"", text:"", images:[], callout:null}) {
     e.target.value = "";
   };
 
+  $(".toggle-step", node).onclick = () => {
+    const collapsed = node.classList.toggle("collapsed");
+    $(".toggle-step", node).textContent = collapsed ? "▸" : "▾";
+  };
   $(".delete-step", node).onclick = () => { node.remove(); renumber(); render(); save(); };
   $(".move-up", node).onclick = () => {
     const prev = node.previousElementSibling;
@@ -367,7 +371,14 @@ document.addEventListener("paste", e => {
 $("#docKicker").addEventListener("input", () => { render(); save(); });
 $("#docTitle").addEventListener("input", () => { render(); save(); });
 $("#docIntro").addEventListener("input", () => { render(); save(); });
-$("#addStepBtn").onclick = () => { addStep(); save(); };
+$("#addStepBtn").onclick = () => {
+  $$(".step-card").forEach(node => {
+    node.classList.add("collapsed");
+    $(".toggle-step", node).textContent = "▸";
+  });
+  addStep();
+  save();
+};
 $("#printBtn").onclick = () => window.print();
 $("#modeSingleBtn").onclick = () => setPreviewMode("single");
 $("#modeAllBtn").onclick = () => setPreviewMode("all");

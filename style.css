@@ -96,7 +96,12 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .section-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .small-add { color:var(--accent); background:var(--accent-soft); padding:7px 10px; }
 .step-card { background:white; border:1px solid var(--line); border-radius:12px; padding:13px; margin-bottom:12px; box-shadow:0 1px 2px #17203308; }
-.step-head { display:grid; grid-template-columns:31px 1fr 30px 30px 30px; gap:6px; align-items:center; margin-bottom:10px; }
+.step-head { display:grid; grid-template-columns:31px 1fr 30px 30px 30px 30px; gap:6px; align-items:center; margin-bottom:10px; }
+.toggle-step { transition:.15s transform; }
+.step-card.collapsed .step-head { margin-bottom:0; }
+.step-card.collapsed .step-text,
+.step-card.collapsed .image-box,
+.step-card.collapsed .special-row { display:none; }
 .step-number { width:29px; height:29px; border-radius:var(--badge-radius); clip-path:var(--badge-clip); background:#edf2f7; display:grid; place-items:center; font-weight:800; font-size:12px; color:#556272; }
 .step-title { padding:7px 9px; font-weight:700; }
 .icon-btn { border:0; background:#f3f5f7; color:#596777; border-radius:7px; width:30px; height:30px; font-weight:700; }
