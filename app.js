@@ -130,8 +130,7 @@ function collect() {
   };
 }
 
-function render() {
-  const d = collect();
+function buildDocHtml(d) {
   let html = `
     <header class="paper-header">
       <div class="paper-kicker">${esc(d.kicker || "Instrukcja krok po kroku")}</div>
@@ -139,9 +138,10 @@ function render() {
       ${d.intro ? `<p class="paper-intro">${esc(d.intro)}</p>` : ""}
     </header>
   `;
-  if (!d.steps.length) html += `<div class="empty-preview">Dodaj pierwszy krok, aby rozpocząć.</div>`;
+  const steps = d.steps || [];
+  if (!steps.length) html += `<div class="empty-preview">Dodaj pierwszy krok, aby rozpocząć.</div>`;
 
-  d.steps.forEach((s, i) => {
+  steps.forEach((s, i) => {
     html += `<section class="preview-step">
       <div class="preview-step-head">
         <div class="preview-num">${String(i+1).padStart(2,"0")}</div>
@@ -152,7 +152,23 @@ function render() {
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;
   });
-  $("#paper").innerHTML = html;
+  return html;
+}
+
+let previewMode = localStorage.getItem("placestruct-preview-mode") || "single";
+
+function render() {
+  const wrap = $("#paperWrap");
+  if (previewMode === "all") {
+    const currentId = getCurrentId();
+    const currentMeta = getDocs().find(d => d.id === currentId) || {};
+    const current = { ...collect(), id: currentId, createdAt: currentMeta.createdAt || currentMeta.updatedAt || 0 };
+    const others = getDocs().filter(d => d.id !== currentId);
+    const all = [...others, current].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    wrap.innerHTML = all.map(d => `<article class="paper">${buildDocHtml(d)}</article>`).join("");
+  } else {
+    wrap.innerHTML = `<article class="paper">${buildDocHtml(collect())}</article>`;
+  }
 }
 
 function calloutHtml(c) {
@@ -182,7 +198,8 @@ function getCurrentId() { return localStorage.getItem(CURRENT_KEY); }
 function setCurrentId(id) { localStorage.setItem(CURRENT_KEY, id); }
 
 function emptyDoc() {
-  return { id: uid(), kicker: "Instrukcja krok po kroku", title: "", intro: "", steps: [], updatedAt: Date.now() };
+  const now = Date.now();
+  return { id: uid(), kicker: "Instrukcja krok po kroku", title: "", intro: "", steps: [], createdAt: now, updatedAt: now };
 }
 
 function save() {
@@ -217,9 +234,10 @@ function load() {
     if (legacyRaw) {
       try { legacy = JSON.parse(legacyRaw); } catch { legacy = null; }
     }
+    const now = Date.now();
     const doc = legacy
-      ? { id: uid(), kicker: legacy.kicker || "Instrukcja krok po kroku", title: legacy.title || "", intro: legacy.intro || "", steps: legacy.steps || [], updatedAt: Date.now() }
-      : { id: uid(), kicker: "Instrukcja krok po kroku", title: "Jak zmienić hasło Wi-Fi", intro: "Instrukcja krok po kroku dla osób, które po raz pierwszy wykonują tę czynność.", steps: starter, updatedAt: Date.now() };
+      ? { id: uid(), kicker: legacy.kicker || "Instrukcja krok po kroku", title: legacy.title || "", intro: legacy.intro || "", steps: legacy.steps || [], createdAt: now, updatedAt: now }
+      : { id: uid(), kicker: "Instrukcja krok po kroku", title: "Jak zmienić hasło Wi-Fi", intro: "Instrukcja krok po kroku dla osób, które po raz pierwszy wykonują tę czynność.", steps: starter, createdAt: now, updatedAt: now };
     docs = [doc];
     currentId = doc.id;
     setDocs(docs);
@@ -322,6 +340,17 @@ $("#docTitle").addEventListener("input", () => { render(); save(); });
 $("#docIntro").addEventListener("input", () => { render(); save(); });
 $("#addStepBtn").onclick = () => { addStep(); save(); };
 $("#printBtn").onclick = () => window.print();
+$("#modeSingleBtn").onclick = () => setPreviewMode("single");
+$("#modeAllBtn").onclick = () => setPreviewMode("all");
+function setPreviewMode(mode) {
+  previewMode = mode;
+  localStorage.setItem("placestruct-preview-mode", mode);
+  $("#modeSingleBtn").classList.toggle("active", mode === "single");
+  $("#modeAllBtn").classList.toggle("active", mode === "all");
+  render();
+}
+$("#modeSingleBtn").classList.toggle("active", previewMode === "single");
+$("#modeAllBtn").classList.toggle("active", previewMode === "all");
 $("#newBtn").onclick = () => {
   save();
   const doc = emptyDoc();
