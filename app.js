@@ -3,27 +3,28 @@ const $$ = (s, root=document) => [...root.querySelectorAll(s)];
 const stepsEl = $("#steps");
 const template = $("#stepTemplate");
 const imageEntryTemplate = $("#imageEntryTemplate");
+const calloutEntryTemplate = $("#calloutEntryTemplate");
 let stepId = 0;
 
 const starter = [
   {
     title: "Otwórz przeglądarkę",
     text: "Uruchom przeglądarkę internetową na swoim komputerze.",
-    images: [], callout: null
+    images: [], callouts: []
   },
   {
     title: "Przejdź do ustawień",
     text: "Kliknij przycisk „Ustawienia”, a następnie wybierz „Sieć Wi-Fi”.",
-    images: [], callout: {type:"tip", text:"Jeżeli nie widzisz tej opcji, przewiń menu w dół."}
+    images: [], callouts: [{type:"tip", text:"Jeżeli nie widzisz tej opcji, przewiń menu w dół."}]
   },
   {
     title: "Zmień hasło",
     text: "Wpisz nowe hasło w odpowiednim polu i zatwierdź zmianę.",
-    images: [], callout: null
+    images: [], callouts: []
   }
 ];
 
-function addStep(data={title:"", text:"", images:[], callout:null}) {
+function addStep(data={title:"", text:"", images:[], callouts:[]}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
   $(".step-title", node).value = data.title || "";
@@ -34,12 +35,14 @@ function addStep(data={title:"", text:"", images:[], callout:null}) {
   images.forEach(img => addImageEntry(imageListEl, node, img));
   updateImageVisibility(node);
 
-  if (data.callout) {
-    $(".callout-type", node).value = data.callout.type;
-    $(".callout-text", node).hidden = false;
-    $(".callout-text", node).value = data.callout.text || "";
-    $(".clear-callout", node).hidden = false;
-  }
+  const calloutListEl = $(".callout-list", node);
+  const callouts = data.callouts || (data.callout ? [data.callout] : []);
+  callouts.forEach(c => addCalloutEntry(calloutListEl, c));
+
+  $(".add-callout-btn", node).onclick = () => {
+    addCalloutEntry(calloutListEl, { type: "tip", text: "" });
+    render(); save();
+  };
 
   $(".upload-btn", node).onclick = () => $(".image-input", node).click();
   $(".add-more-images", node).onclick = () => $(".image-input", node).click();
@@ -67,22 +70,7 @@ function addStep(data={title:"", text:"", images:[], callout:null}) {
     if (next) { stepsEl.insertBefore(next, node); renumber(); render(); save(); }
   };
 
-  $(".callout-type", node).onchange = () => {
-    const type = $(".callout-type", node).value;
-    $(".callout-text", node).hidden = !type;
-    $(".clear-callout", node).hidden = !type;
-    if (!type) $(".callout-text", node).value = "";
-    render(); save();
-  };
-  $(".clear-callout", node).onclick = () => {
-    $(".callout-type", node).value = "";
-    $(".callout-text", node).value = "";
-    $(".callout-text", node).hidden = true;
-    $(".clear-callout", node).hidden = true;
-    render(); save();
-  };
-
-  $$(".step-title, .step-text, .callout-text", node).forEach(el => {
+  $$(".step-title, .step-text", node).forEach(el => {
     el.addEventListener("input", () => { render(); save(); });
   });
 
@@ -159,6 +147,21 @@ function addImageEntry(container, stepNode, data = { src: "", caption: "", scale
   container.appendChild(entry);
 }
 
+function addCalloutEntry(container, data = { type: "tip", text: "" }) {
+  const entry = calloutEntryTemplate.content.firstElementChild.cloneNode(true);
+  $(".callout-type", entry).value = data.type || "tip";
+  $(".callout-text", entry).value = data.text || "";
+
+  $(".callout-type", entry).addEventListener("change", () => { render(); save(); });
+  $(".callout-text", entry).addEventListener("input", () => { render(); save(); });
+  $(".remove-callout", entry).onclick = () => {
+    entry.remove();
+    render(); save();
+  };
+
+  container.appendChild(entry);
+}
+
 function renumber() {
   $$(".step-card").forEach((node, i) => $(".step-number", node).textContent = String(i+1).padStart(2,"0"));
 }
@@ -176,10 +179,10 @@ function collect() {
         caption: $(".caption-input", entry).value.trim(),
         scale: Number($(".scale-input", entry).value) || 100
       })),
-      callout: $(".callout-type", node).value ? {
-        type: $(".callout-type", node).value,
-        text: $(".callout-text", node).value.trim()
-      } : null
+      callouts: $$(".callout-entry", node).map(entry => ({
+        type: $(".callout-type", entry).value,
+        text: $(".callout-text", entry).value.trim()
+      }))
     }))
   };
 }
@@ -203,7 +206,7 @@ function buildDocHtml(d) {
       </div>
       ${s.text ? `<div class="preview-text">${s.text}</div>` : ""}
       ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
-      ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
+      ${(s.callouts || []).filter(c => c.text).map(calloutHtml).join("")}
     </section>`;
   });
   html += `<div class="print-footer">${esc(d.title || "Tytuł instrukcji")}</div>`;

@@ -139,9 +139,11 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .image-controls button { border:0; border-radius:7px; padding:7px 9px; background:#f0f3f6; color:#536172; }
 .add-more-images { margin-top:10px; width:100%; text-align:center; }
 .add-more-hint { display:block; text-align:center; margin-top:7px; color:#9aa5b1; font-size:11px; }
-.special-row { margin-top:10px; display:grid; grid-template-columns:1fr; gap:6px; }
-.callout-text { display:block; }
-.clear-callout { width:max-content; border:0; background:none; color:#a25750; font-size:11px; padding:0; }
+.special-row { margin-top:10px; }
+.callout-list { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
+.callout-entry { background:#fafbfd; border:1px solid #e1e5e9; border-radius:9px; padding:9px; }
+.callout-entry-row { display:grid; grid-template-columns:1fr 30px; gap:6px; margin-bottom:6px; }
+.add-callout-btn { width:100%; text-align:center; }
 .preview-area { overflow:auto; padding:34px 38px 60px; }
 .preview-toolbar { max-width:820px; margin:0 auto 15px; display:flex; justify-content:space-between; align-items:center; color:#596777; font-size:12px; font-weight:700; }
 .a4-badge { font-weight:600; color:#8a96a4; }
@@ -223,6 +225,7 @@ body.dark .shape-btn { background:#1b222b; border-color:#354252; color:#c5d0dc; 
 body.dark .shape-btn.active { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
 body.dark .image-placeholder { background:#181f27; border-color:#3a4654; }
 body.dark .image-entry { background:#181f27; border-color:#3a4654; }
+body.dark .callout-entry { background:#181f27; border-color:#3a4654; }
 body.dark .layout-btn { background:#1b222b; border-color:#354252; color:#c5d0dc; }
 body.dark .layout-btn.active { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
 body.dark .image-scale-row .scale-value { color:#c5d0dc; }

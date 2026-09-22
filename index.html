@@ -141,16 +141,24 @@
       </div>
 
       <div class="special-row">
+        <div class="callout-list"></div>
+        <button type="button" class="ghost add-callout-btn">＋ Dodaj wyróżnienie</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="calloutEntryTemplate">
+    <div class="callout-entry">
+      <div class="callout-entry-row">
         <select class="callout-type">
-          <option value="">＋ Dodaj wyróżnienie</option>
           <option value="tip">💡 Wskazówka</option>
           <option value="warning">⚠️ Uwaga</option>
           <option value="info">ℹ️ Informacja</option>
           <option value="important">❗ Ważne</option>
         </select>
-        <input class="callout-text" placeholder="Treść wyróżnienia..." hidden>
-        <button class="clear-callout" hidden>Usuń</button>
+        <button type="button" class="icon-btn remove-callout" title="Usuń wyróżnienie">×</button>
       </div>
+      <input class="callout-text" placeholder="Treść wyróżnienia...">
     </div>
   </template>
 
