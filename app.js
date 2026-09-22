@@ -419,8 +419,18 @@ function applyBadgeShape(shape) {
   $$(".shape-btn").forEach(b => b.classList.toggle("active", b.dataset.shape === shape));
 }
 
+const FONT_SCALE_KEY = "placestruct-font-scale";
+const DEFAULT_FONT_SCALE = 100;
+
+function applyFontScale(scale) {
+  document.documentElement.style.setProperty("--content-scale", scale / 100);
+  $("#fontScaleInput").value = scale;
+  $("#fontScaleValue").textContent = `${scale}%`;
+}
+
 applyBadgeColor(localStorage.getItem(BADGE_COLOR_KEY) || DEFAULT_BADGE_COLOR);
 applyBadgeShape(localStorage.getItem(BADGE_SHAPE_KEY) || DEFAULT_BADGE_SHAPE);
+applyFontScale(Number(localStorage.getItem(FONT_SCALE_KEY)) || DEFAULT_FONT_SCALE);
 
 $("#customizeBtn").onclick = () => { $("#customizePanel").hidden = !$("#customizePanel").hidden; };
 document.addEventListener("click", e => {
@@ -438,9 +448,15 @@ $$(".shape-btn").forEach(btn => {
     localStorage.setItem(BADGE_SHAPE_KEY, btn.dataset.shape);
   };
 });
+$("#fontScaleInput").oninput = e => {
+  applyFontScale(Number(e.target.value));
+  localStorage.setItem(FONT_SCALE_KEY, e.target.value);
+};
 $("#resetBadgeBtn").onclick = () => {
   localStorage.removeItem(BADGE_COLOR_KEY);
   localStorage.removeItem(BADGE_SHAPE_KEY);
+  localStorage.removeItem(FONT_SCALE_KEY);
   applyBadgeColor(DEFAULT_BADGE_COLOR);
   applyBadgeShape(DEFAULT_BADGE_SHAPE);
+  applyFontScale(DEFAULT_FONT_SCALE);
 };
