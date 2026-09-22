@@ -210,6 +210,19 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
   .print-footer { position:fixed; left:18mm; right:18mm; bottom:8mm; margin-top:0; }
   body.print-multi-doc .paper { padding-bottom:20mm; }
   body.print-multi-doc .print-footer { position:static; left:auto; right:auto; bottom:auto; margin-top:20px; }
+
+  /* Print is always the light paper, regardless of the editor's dark/light theme */
+  .paper, .pagedoc { background:white !important; color:#18212b !important; }
+  .paper-header { border-color:#202a35 !important; }
+  .paper-kicker { color:#2563eb !important; }
+  .paper-intro { color:#667382 !important; }
+  .preview-text { color:#3f4b58 !important; }
+  .preview-image img { border-color:#dfe4e9 !important; }
+  .print-footer { border-top-color:#dce2e8 !important; }
+  .callout.tip { background:#eef7ef !important; }
+  .callout.warning { background:#fff6df !important; }
+  .callout.info { background:#eef5fb !important; }
+  .callout.important { background:#fff0ee !important; }
 }
 
 /* Placestruct themes */
