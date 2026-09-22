@@ -154,7 +154,7 @@ input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0
 .preview-image:last-child { margin-bottom:0; }
 body.image-layout-row .step-images { display:grid; grid-template-columns:repeat(3, 1fr); align-items:start; gap:16px; }
 body.image-layout-row .preview-image { margin:0; min-width:0; }
-.preview-image img { display:block; max-width:100%; max-height:430px; margin:0 auto; border-radius:6px; border:1px solid #dfe4e9; object-fit:contain; }
+.preview-image img { display:block; max-width:100%; height:auto; margin:0 auto; border-radius:6px; border:1px solid #dfe4e9; object-fit:contain; }
 .image-caption { color:#7a8693; text-align:center; font-size:calc(10.5px * var(--content-scale)); margin-top:6px; }
 .callout { margin:14px 0 0 48px; padding:12px 14px; border-radius:8px; border-left:4px solid; font-size:calc(12px * var(--content-scale)); line-height:1.55; break-inside:avoid; }
 .callout strong { display:block; font-size:calc(10px * var(--content-scale)); letter-spacing:.09em; margin-bottom:3px; }
@@ -163,6 +163,7 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
 .callout.info { background:#eef5fb; border-left-color:#2563eb; }
 .callout.important { background:#fff0ee; border-left-color:#c0392b; }
 .empty-preview { text-align:center; color:#9aa5b1; padding:100px 20px; border:1px dashed #d6dde5; border-radius:12px; }
+.print-footer { display:none; }
 @media (max-width: 1050px) {
   .workspace { grid-template-columns:1fr; height:auto; }
   .editor { border-right:0; border-bottom:1px solid var(--line); overflow:visible; }
@@ -178,6 +179,11 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
   .paper-wrap { display:block; min-width:0; }
   .paper { width:auto; min-height:0; margin:0; box-shadow:none; padding:22mm 18mm 20mm; }
   .paper + .paper { break-before:page; page-break-before:always; }
+  .print-footer {
+    display:block; margin-top:20px;
+    text-align:center; font-size:9px; letter-spacing:.04em; color:#9aa5b1;
+    border-top:1px solid #dce2e8; padding-top:6px; text-transform:uppercase;
+  }
 }
 
 /* Placestruct themes */

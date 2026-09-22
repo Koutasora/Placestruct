@@ -185,6 +185,7 @@ function buildDocHtml(d) {
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;
   });
+  html += `<div class="print-footer">${esc(d.title || "Tytuł instrukcji")}</div>`;
   return html;
 }
 
