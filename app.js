@@ -2,33 +2,37 @@ const $ = (s, root=document) => root.querySelector(s);
 const $$ = (s, root=document) => [...root.querySelectorAll(s)];
 const stepsEl = $("#steps");
 const template = $("#stepTemplate");
+const imageEntryTemplate = $("#imageEntryTemplate");
 let stepId = 0;
 
 const starter = [
   {
     title: "Otwórz przeglądarkę",
     text: "Uruchom przeglądarkę internetową na swoim komputerze.",
-    image: null, caption: "", callout: null
+    images: [], callout: null
   },
   {
     title: "Przejdź do ustawień",
     text: "Kliknij przycisk „Ustawienia”, a następnie wybierz „Sieć Wi-Fi”.",
-    image: null, caption: "", callout: {type:"tip", text:"Jeżeli nie widzisz tej opcji, przewiń menu w dół."}
+    images: [], callout: {type:"tip", text:"Jeżeli nie widzisz tej opcji, przewiń menu w dół."}
   },
   {
     title: "Zmień hasło",
     text: "Wpisz nowe hasło w odpowiednim polu i zatwierdź zmianę.",
-    image: null, caption: "", callout: null
+    images: [], callout: null
   }
 ];
 
-function addStep(data={title:"", text:"", image:null, caption:"", scale:100, callout:null}) {
+function addStep(data={title:"", text:"", images:[], callout:null}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
   $(".step-title", node).value = data.title || "";
   $(".step-text", node).value = data.text || "";
 
-  if (data.image) setImage(node, data.image, data.caption || "", data.scale || 100);
+  const imageListEl = $(".image-list", node);
+  const images = data.images || (data.image ? [{ src: data.image, caption: data.caption || "", scale: data.scale || 100 }] : []);
+  images.forEach(img => addImageEntry(imageListEl, node, img));
+  updateImageVisibility(node);
 
   if (data.callout) {
     $(".callout-type", node).value = data.callout.type;
@@ -38,27 +42,15 @@ function addStep(data={title:"", text:"", image:null, caption:"", scale:100, cal
   }
 
   $(".upload-btn", node).onclick = () => $(".image-input", node).click();
+  $(".add-more-images", node).onclick = () => $(".image-input", node).click();
   $(".image-placeholder", node).ondragover = e => { e.preventDefault(); };
   $(".image-placeholder", node).ondrop = e => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) readImage(node, file);
+    [...e.dataTransfer.files].forEach(file => addImageFromFile(node, file));
   };
   $(".image-input", node).onchange = e => {
-    const file = e.target.files[0];
-    if (file) readImage(node, file);
-  };
-  $(".change-image", node).onclick = () => $(".image-input", node).click();
-  $(".scale-input", node).oninput = () => {
-    $(".scale-value", node).textContent = `${$(".scale-input", node).value}%`;
-    render(); save();
-  };
-  $(".remove-image", node).onclick = () => {
-    node.querySelector(".image-preview").hidden = true;
-    node.querySelector(".image-placeholder").hidden = false;
-    node.querySelector(".image-input").value = "";
-    render();
-    save();
+    [...e.target.files].forEach(file => addImageFromFile(node, file));
+    e.target.value = "";
   };
 
   $(".delete-step", node).onclick = () => { node.remove(); renumber(); render(); save(); };
@@ -86,7 +78,7 @@ function addStep(data={title:"", text:"", image:null, caption:"", scale:100, cal
     render(); save();
   };
 
-  $$(".step-title, .step-text, .caption-input, .callout-text", node).forEach(el => {
+  $$(".step-title, .step-text, .callout-text", node).forEach(el => {
     el.addEventListener("input", () => { render(); save(); });
   });
 
@@ -95,23 +87,50 @@ function addStep(data={title:"", text:"", image:null, caption:"", scale:100, cal
   render();
 }
 
-function readImage(node, file) {
+function updateImageVisibility(stepNode) {
+  const has = $$(".image-entry", stepNode).length > 0;
+  $(".image-placeholder", stepNode).hidden = has;
+  $(".add-more-images", stepNode).hidden = !has;
+}
+
+function addImageFromFile(stepNode, file) {
   if (!file.type.startsWith("image/")) return;
   const reader = new FileReader();
   reader.onload = () => {
-    setImage(node, reader.result, $(".caption-input", node).value, $(".scale-input", node).value);
+    addImageEntry($(".image-list", stepNode), stepNode, { src: reader.result, caption: "", scale: 100 });
+    updateImageVisibility(stepNode);
     render(); save();
   };
   reader.readAsDataURL(file);
 }
 
-function setImage(node, src, caption="", scale=100) {
-  $(".image-preview img", node).src = src;
-  $(".caption-input", node).value = caption;
-  $(".scale-input", node).value = scale;
-  $(".scale-value", node).textContent = `${scale}%`;
-  $(".image-preview", node).hidden = false;
-  $(".image-placeholder", node).hidden = true;
+function addImageEntry(container, stepNode, data = { src: "", caption: "", scale: 100 }) {
+  const entry = imageEntryTemplate.content.firstElementChild.cloneNode(true);
+  $("img", entry).src = data.src;
+  $(".caption-input", entry).value = data.caption || "";
+  $(".scale-input", entry).value = data.scale || 100;
+  $(".scale-value", entry).textContent = `${data.scale || 100}%`;
+
+  $(".scale-input", entry).oninput = () => {
+    $(".scale-value", entry).textContent = `${$(".scale-input", entry).value}%`;
+    render(); save();
+  };
+  $(".caption-input", entry).addEventListener("input", () => { render(); save(); });
+  $(".move-image-up", entry).onclick = () => {
+    const prev = entry.previousElementSibling;
+    if (prev) { container.insertBefore(entry, prev); render(); save(); }
+  };
+  $(".move-image-down", entry).onclick = () => {
+    const next = entry.nextElementSibling;
+    if (next) { container.insertBefore(next, entry); render(); save(); }
+  };
+  $(".remove-image", entry).onclick = () => {
+    entry.remove();
+    updateImageVisibility(stepNode);
+    render(); save();
+  };
+
+  container.appendChild(entry);
 }
 
 function renumber() {
@@ -126,9 +145,11 @@ function collect() {
     steps: $$(".step-card").map(node => ({
       title: $(".step-title", node).value.trim(),
       text: $(".step-text", node).value.trim(),
-      image: $(".image-preview", node).hidden ? null : $(".image-preview img", node).src,
-      caption: $(".caption-input", node).value.trim(),
-      scale: Number($(".scale-input", node).value) || 100,
+      images: $$(".image-entry", node).map(entry => ({
+        src: $("img", entry).src,
+        caption: $(".caption-input", entry).value.trim(),
+        scale: Number($(".scale-input", entry).value) || 100
+      })),
       callout: $(".callout-type", node).value ? {
         type: $(".callout-type", node).value,
         text: $(".callout-text", node).value.trim()
@@ -155,7 +176,7 @@ function buildDocHtml(d) {
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
       ${s.text ? `<p class="preview-text">${esc(s.text)}</p>` : ""}
-      ${s.image ? `<figure class="preview-image"><img src="${s.image}" alt="" style="width:${s.scale || 100}%">${s.caption ? `<figcaption class="image-caption">${esc(s.caption)}</figcaption>` : ""}</figure>` : ""}
+      ${(s.images && s.images.length) ? `<div class="step-images">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
       ${s.callout && s.callout.text ? calloutHtml(s.callout) : ""}
     </section>`;
   });
@@ -339,7 +360,7 @@ document.addEventListener("paste", e => {
   const targetCard = (active && active.closest(".step-card")) || stepsEl.lastElementChild;
   if (!targetCard) return;
   e.preventDefault();
-  readImage(targetCard, imageFile);
+  addImageFromFile(targetCard, imageFile);
 });
 
 $("#docKicker").addEventListener("input", () => { render(); save(); });
@@ -428,9 +449,18 @@ function applyFontScale(scale) {
   $("#fontScaleValue").textContent = `${scale}%`;
 }
 
+const IMAGE_LAYOUT_KEY = "placestruct-image-layout";
+const DEFAULT_IMAGE_LAYOUT = "stack";
+
+function applyImageLayout(layout) {
+  document.body.classList.toggle("image-layout-row", layout === "row");
+  $$(".layout-btn").forEach(b => b.classList.toggle("active", b.dataset.layout === layout));
+}
+
 applyBadgeColor(localStorage.getItem(BADGE_COLOR_KEY) || DEFAULT_BADGE_COLOR);
 applyBadgeShape(localStorage.getItem(BADGE_SHAPE_KEY) || DEFAULT_BADGE_SHAPE);
 applyFontScale(Number(localStorage.getItem(FONT_SCALE_KEY)) || DEFAULT_FONT_SCALE);
+applyImageLayout(localStorage.getItem(IMAGE_LAYOUT_KEY) || DEFAULT_IMAGE_LAYOUT);
 
 $("#customizeBtn").onclick = () => { $("#customizePanel").hidden = !$("#customizePanel").hidden; };
 document.addEventListener("click", e => {
@@ -452,11 +482,19 @@ $("#fontScaleInput").oninput = e => {
   applyFontScale(Number(e.target.value));
   localStorage.setItem(FONT_SCALE_KEY, e.target.value);
 };
+$$(".layout-btn").forEach(btn => {
+  btn.onclick = () => {
+    applyImageLayout(btn.dataset.layout);
+    localStorage.setItem(IMAGE_LAYOUT_KEY, btn.dataset.layout);
+  };
+});
 $("#resetBadgeBtn").onclick = () => {
   localStorage.removeItem(BADGE_COLOR_KEY);
   localStorage.removeItem(BADGE_SHAPE_KEY);
   localStorage.removeItem(FONT_SCALE_KEY);
+  localStorage.removeItem(IMAGE_LAYOUT_KEY);
   applyBadgeColor(DEFAULT_BADGE_COLOR);
   applyBadgeShape(DEFAULT_BADGE_SHAPE);
   applyFontScale(DEFAULT_FONT_SCALE);
+  applyImageLayout(DEFAULT_IMAGE_LAYOUT);
 };
