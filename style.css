@@ -31,6 +31,7 @@ button { cursor: pointer; }
   background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:14px;
   box-shadow:0 12px 30px #1c27331f; display:flex; flex-direction:column; gap:5px;
 }
+.customize-panel[hidden] { display:none; }
 .customize-panel label { margin:6px 0 0; }
 .customize-panel label:first-child { margin-top:0; }
 .customize-panel input[type="color"] { padding:2px; height:36px; cursor:pointer; }
