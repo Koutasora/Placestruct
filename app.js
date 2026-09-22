@@ -302,6 +302,21 @@ function renderLibrary() {
   });
 }
 
+document.addEventListener("paste", e => {
+  const items = e.clipboardData && e.clipboardData.items;
+  if (!items) return;
+  let imageFile = null;
+  for (const item of items) {
+    if (item.type.startsWith("image/")) { imageFile = item.getAsFile(); break; }
+  }
+  if (!imageFile) return;
+  const active = document.activeElement;
+  const targetCard = (active && active.closest(".step-card")) || stepsEl.lastElementChild;
+  if (!targetCard) return;
+  e.preventDefault();
+  readImage(targetCard, imageFile);
+});
+
 $("#docKicker").addEventListener("input", () => { render(); save(); });
 $("#docTitle").addEventListener("input", () => { render(); save(); });
 $("#docIntro").addEventListener("input", () => { render(); save(); });
