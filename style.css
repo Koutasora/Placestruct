@@ -175,7 +175,7 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
   .topbar, .editor, .preview-toolbar { display:none !important; }
   .workspace { display:block; height:auto; }
   .preview-area { padding:0; overflow:visible; }
-  .paper-wrap { min-width:0; gap:0; }
+  .paper-wrap { display:block; min-width:0; }
   .paper { width:auto; min-height:0; margin:0; box-shadow:none; padding:22mm 18mm 20mm; }
   .paper + .paper { break-before:page; page-break-before:always; }
 }
