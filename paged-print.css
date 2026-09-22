@@ -1,0 +1,17 @@
+@page {
+  size: A4;
+  margin: 22mm 18mm 26mm;
+  @bottom-center {
+    content: string(doctitle);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    color: #9aa5b1;
+    text-transform: uppercase;
+    border-top: 1px solid #dce2e8;
+    padding-top: 6px;
+    width: 100%;
+  }
+}
+
+.pagedoc-title { string-set: doctitle content(); }
+.pagedoc + .pagedoc { break-before: page; }
