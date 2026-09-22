@@ -16,6 +16,20 @@
       </div>
     </div>
     <div class="top-actions">
+      <div class="customize-wrap">
+        <button class="ghost" id="customizeBtn">🎨 Wygląd</button>
+        <div class="customize-panel" id="customizePanel" hidden>
+          <label>Kolor numerków kroków</label>
+          <input type="color" id="badgeColorInput" value="#2563eb">
+          <label>Kształt numerków</label>
+          <div class="shape-options">
+            <button type="button" class="shape-btn" data-shape="square" title="Kwadrat">▪</button>
+            <button type="button" class="shape-btn" data-shape="rounded" title="Zaokrąglony">▢</button>
+            <button type="button" class="shape-btn" data-shape="circle" title="Koło">●</button>
+          </div>
+          <button type="button" class="ghost reset-badge-btn" id="resetBadgeBtn">Przywróć domyślne</button>
+        </div>
+      </div>
       <button class="ghost theme-btn" id="themeBtn">☾ Ciemny</button><button class="ghost" id="newBtn">Nowa</button><button class="ghost" id="clearBtn">Wyczyść</button>
       <button class="primary" id="printBtn">🖨 Drukuj</button>
     </div>

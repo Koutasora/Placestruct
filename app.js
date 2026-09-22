@@ -383,3 +383,45 @@ $("#themeBtn").onclick = () => {
   updateThemeButton();
 };
 updateThemeButton();
+
+// Personalizacja wyglądu numerków kroków
+const BADGE_COLOR_KEY = "placestruct-badge-color";
+const BADGE_SHAPE_KEY = "placestruct-badge-shape";
+const DEFAULT_BADGE_COLOR = "#2563eb";
+const DEFAULT_BADGE_SHAPE = "square";
+const SHAPE_RADIUS = { square: "9px", rounded: "16px", circle: "50%" };
+
+function applyBadgeColor(color) {
+  document.documentElement.style.setProperty("--badge-color", color);
+  $("#badgeColorInput").value = color;
+}
+function applyBadgeShape(shape) {
+  document.documentElement.style.setProperty("--badge-radius", SHAPE_RADIUS[shape] || SHAPE_RADIUS[DEFAULT_BADGE_SHAPE]);
+  $$(".shape-btn").forEach(b => b.classList.toggle("active", b.dataset.shape === shape));
+}
+
+applyBadgeColor(localStorage.getItem(BADGE_COLOR_KEY) || DEFAULT_BADGE_COLOR);
+applyBadgeShape(localStorage.getItem(BADGE_SHAPE_KEY) || DEFAULT_BADGE_SHAPE);
+
+$("#customizeBtn").onclick = () => { $("#customizePanel").hidden = !$("#customizePanel").hidden; };
+document.addEventListener("click", e => {
+  const panel = $("#customizePanel");
+  if (panel.hidden) return;
+  if (!panel.contains(e.target) && e.target !== $("#customizeBtn")) panel.hidden = true;
+});
+$("#badgeColorInput").oninput = e => {
+  applyBadgeColor(e.target.value);
+  localStorage.setItem(BADGE_COLOR_KEY, e.target.value);
+};
+$$(".shape-btn").forEach(btn => {
+  btn.onclick = () => {
+    applyBadgeShape(btn.dataset.shape);
+    localStorage.setItem(BADGE_SHAPE_KEY, btn.dataset.shape);
+  };
+});
+$("#resetBadgeBtn").onclick = () => {
+  localStorage.removeItem(BADGE_COLOR_KEY);
+  localStorage.removeItem(BADGE_SHAPE_KEY);
+  applyBadgeColor(DEFAULT_BADGE_COLOR);
+  applyBadgeShape(DEFAULT_BADGE_SHAPE);
+};
