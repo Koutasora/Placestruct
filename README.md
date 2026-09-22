@@ -1,15 +1,6 @@
 # Placestruct
 
-Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych do druku (podgląd A4). Bez backendu, bez logowania — wszystko żyje w przeglądarce.
-
-## Uruchomienie
-
-Nie wymaga instalacji ani budowania. Wystarczy otworzyć `index.html` w przeglądarce.
-
-## GitHub Pages
-
-Wrzuć pliki `index.html`, `style.css` i `app.js` do repozytorium, a następnie w:
-**Settings → Pages → Deploy from branch** wybierz główną gałąź (`main`).
+Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych do druku (podgląd A4). 
 
 ## Funkcje
 
