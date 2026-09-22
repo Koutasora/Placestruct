@@ -13,6 +13,7 @@
   --badge-radius: 9px;
   --badge-clip: none;
   --content-scale: 1;
+  --callout-scale: 1;
 }
 html, body { margin: 0; min-height: 100%; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
 button, input, textarea, select { font: inherit; }
@@ -171,8 +172,12 @@ body.image-layout-row .step-images { display:grid; grid-template-columns:repeat(
 body.image-layout-row .preview-image { margin:0; min-width:0; }
 .preview-image img { display:block; max-width:100%; height:auto; margin:0 auto; border-radius:6px; border:1px solid #dfe4e9; object-fit:contain; }
 .image-caption { color:#7a8693; text-align:center; font-size:calc(10.5px * var(--content-scale)); margin-top:6px; }
-.callout { margin:14px 0 0 48px; padding:12px 14px; border-radius:8px; border-left:4px solid; font-size:calc(12px * var(--content-scale)); line-height:1.55; break-inside:avoid; }
-.callout strong { display:block; font-size:calc(10px * var(--content-scale)); letter-spacing:.09em; margin-bottom:3px; }
+.callout {
+  margin:14px 0 0 48px; padding:calc(12px * var(--callout-scale)) calc(14px * var(--callout-scale));
+  border-radius:8px; border-left:calc(4px * var(--callout-scale)) solid;
+  font-size:calc(12px * var(--content-scale) * var(--callout-scale)); line-height:1.55; break-inside:avoid;
+}
+.callout strong { display:block; font-size:calc(10px * var(--content-scale) * var(--callout-scale)); letter-spacing:.09em; margin-bottom:3px; }
 .callout.tip { background:#eef7ef; border-left-color:#3f9153; }
 .callout.warning { background:#fff6df; border-left-color:#b8860b; }
 .callout.info { background:#eef5fb; border-left-color:#2563eb; }
