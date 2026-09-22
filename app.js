@@ -224,8 +224,10 @@ function render() {
     const others = getDocs().filter(d => d.id !== currentId);
     const all = [...others, current].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     wrap.innerHTML = all.map(d => `<article class="paper">${buildDocHtml(d)}</article>`).join("");
+    document.body.classList.toggle("print-multi-doc", all.length > 1);
   } else {
     wrap.innerHTML = `<article class="paper">${buildDocHtml(collect())}</article>`;
+    document.body.classList.remove("print-multi-doc");
   }
 }
 
