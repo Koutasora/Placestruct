@@ -204,7 +204,10 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
   body.pagedjs-printing .preview-area { display:none !important; }
   body.pagedjs-printing .pagedjs-print-target { position:static; left:auto; }
   .paper-wrap { display:block; min-width:0; }
-  .paper { width:auto; min-height:0; margin:0; box-shadow:none; padding:22mm 18mm 26mm; }
+  .paper {
+    width:auto; min-height:0; margin:0; box-shadow:none; padding:22mm 18mm 26mm;
+    -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  }
   .paper + .paper { break-before:page; page-break-before:always; }
   .preview-image img { max-height:110mm; }
   .print-footer { position:fixed; left:18mm; right:18mm; bottom:8mm; margin-top:0; }
