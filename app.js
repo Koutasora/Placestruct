@@ -187,12 +187,11 @@ function collect() {
   };
 }
 
-function buildDocHtml(d, opts = {}) {
-  const { footer = true, titleClass = "" } = opts;
+function buildDocHtml(d) {
   let html = `
     <header class="paper-header">
       <div class="paper-kicker">${esc(d.kicker || "Instrukcja krok po kroku")}</div>
-      <h3${titleClass ? ` class="${titleClass}"` : ""}>${esc(d.title || "Tytuł instrukcji")}</h3>
+      <h3>${esc(d.title || "Tytuł instrukcji")}</h3>
       ${d.intro ? `<p class="paper-intro">${esc(d.intro)}</p>` : ""}
     </header>
   `;
@@ -210,24 +209,20 @@ function buildDocHtml(d, opts = {}) {
       ${(s.callouts || []).filter(c => c.text).map(calloutHtml).join("")}
     </section>`;
   });
-  if (footer) html += `<div class="print-footer">${esc(d.title || "Tytuł instrukcji")}</div>`;
+  html += `<div class="print-footer">${esc(d.title || "Tytuł instrukcji")}</div>`;
   return html;
 }
 
 let previewMode = localStorage.getItem("placestruct-preview-mode") || "single";
 
-function getAllDocsForPreview() {
-  const currentId = getCurrentId();
-  const currentMeta = getDocs().find(d => d.id === currentId) || {};
-  const current = { ...collect(), id: currentId, createdAt: currentMeta.createdAt || currentMeta.updatedAt || 0 };
-  const others = getDocs().filter(d => d.id !== currentId);
-  return [...others, current].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-}
-
 function render() {
   const wrap = $("#paperWrap");
   if (previewMode === "all") {
-    const all = getAllDocsForPreview();
+    const currentId = getCurrentId();
+    const currentMeta = getDocs().find(d => d.id === currentId) || {};
+    const current = { ...collect(), id: currentId, createdAt: currentMeta.createdAt || currentMeta.updatedAt || 0 };
+    const others = getDocs().filter(d => d.id !== currentId);
+    const all = [...others, current].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
     wrap.innerHTML = all.map(d => `<article class="paper">${buildDocHtml(d)}</article>`).join("");
     document.body.classList.toggle("print-multi-doc", all.length > 1);
   } else {
@@ -411,35 +406,7 @@ $("#addStepBtn").onclick = () => {
   addStep();
   save();
 };
-async function printWithPagedJs(docs) {
-  const target = $("#pagedPrintTarget");
-  target.innerHTML = "";
-  const content = docs
-    .map(d => `<section class="pagedoc">${buildDocHtml(d, { footer: false, titleClass: "pagedoc-title" })}</section>`)
-    .join("");
-  const previewer = new PagedModule.Previewer();
-  await previewer.preview(content, ["style.css", "paged-print.css"], target);
-  document.body.classList.add("pagedjs-printing");
-  window.print();
-  document.body.classList.remove("pagedjs-printing");
-  target.innerHTML = "";
-}
-
-$("#printBtn").onclick = async () => {
-  if (previewMode === "all") {
-    const docs = getAllDocsForPreview();
-    if (docs.length > 1 && window.PagedModule) {
-      const btn = $("#printBtn");
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = "Przygotowywanie...";
-      try { await printWithPagedJs(docs); return; }
-      catch (err) { console.error("Paged.js print failed, falling back:", err); }
-      finally { btn.disabled = false; btn.textContent = originalText; }
-    }
-  }
-  window.print();
-};
+$("#printBtn").onclick = () => window.print();
 $("#modeSingleBtn").onclick = () => setPreviewMode("single");
 $("#modeAllBtn").onclick = () => setPreviewMode("all");
 function setPreviewMode(mode) {

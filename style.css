@@ -190,15 +190,12 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
   .steps-section .section-heading { top:70px; }
   .preview-area { padding:25px 10px 50px; overflow:visible; }
 }
-.pagedjs-print-target { position:fixed; top:0; left:-10000px; }
 @media print {
   @page { size:A4; margin:0; }
   html, body { background:white; }
   .topbar, .editor, .preview-toolbar { display:none !important; }
   .workspace { display:block; height:auto; }
   .preview-area { padding:0; overflow:visible; }
-  body.pagedjs-printing .preview-area { display:none !important; }
-  body.pagedjs-printing .pagedjs-print-target { position:static; left:auto; }
   .paper-wrap { display:block; min-width:0; }
   .paper { width:auto; min-height:0; margin:0; box-shadow:none; padding:22mm 18mm 26mm; }
   .paper + .paper { break-before:page; page-break-before:always; }
