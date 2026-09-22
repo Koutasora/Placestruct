@@ -94,6 +94,10 @@ input, textarea, select {
 textarea { resize:vertical; line-height:1.5; }
 input:focus, textarea:focus, select:focus { border-color:#8eb0f6; box-shadow:0 0 0 3px #2563eb12; }
 .section-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.steps-section .section-heading {
+  position:sticky; top:0; z-index:5; background:#f8fafc;
+  margin:0 -26px 12px; padding:14px 26px 12px; border-bottom:1px solid var(--line);
+}
 .small-add { color:var(--accent); background:var(--accent-soft); padding:7px 10px; }
 .step-card { background:white; border:1px solid var(--line); border-radius:12px; padding:13px; margin-bottom:12px; box-shadow:0 1px 2px #17203308; }
 .step-head { display:grid; grid-template-columns:31px 1fr 30px 30px 30px 30px; gap:6px; align-items:center; margin-bottom:10px; }
@@ -162,6 +166,7 @@ body.image-layout-row .preview-image { margin:0; min-width:0; }
 @media (max-width: 1050px) {
   .workspace { grid-template-columns:1fr; height:auto; }
   .editor { border-right:0; border-bottom:1px solid var(--line); overflow:visible; }
+  .steps-section .section-heading { top:70px; }
   .preview-area { padding:25px 10px 50px; overflow:visible; }
 }
 @media print {
@@ -181,6 +186,7 @@ body.dark {
   --line:#2b3542; --accent:#6ea0ff; --accent-soft:#1c3156; --danger:#ff8175;
 }
 body.dark .topbar, body.dark .editor { background:#151b23; }
+body.dark .steps-section .section-heading { background:#151b23; }
 body.dark input, body.dark textarea, body.dark select { background:#1b222b; color:#edf2f7; border-color:#354252; }
 body.dark .ghost, body.dark .icon-btn, body.dark .upload-btn { background:#232c37; color:#d8e0e8; }
 body.dark .step-card { background:#1b222b; border-color:#303b48; }
