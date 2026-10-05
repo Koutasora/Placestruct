@@ -24,12 +24,6 @@ const starter = [
   }
 ];
 
-// Auto layout: a 3-column grid; an image spans 1, 2 or 3 columns depending on its size
-function imageSpan(scale) {
-  const sc = Number(scale) || 100;
-  return sc <= 33 ? 1 : sc <= 66 ? 2 : 3;
-}
-
 function addStep(data={title:"", text:"", images:[], callouts:[]}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
@@ -212,7 +206,7 @@ function buildDocHtml(d, opts = {}) {
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
       ${s.text ? `<div class="preview-text">${s.text}</div>` : ""}
-      ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image" data-span="${imageSpan(img.scale)}"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
+      ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
       ${(s.callouts || []).filter(c => c.text).map(calloutHtml).join("")}
     </section>`;
   });
@@ -537,11 +531,10 @@ function applyCalloutScale(scale) {
 }
 
 const IMAGE_LAYOUT_KEY = "placestruct-image-layout";
-const DEFAULT_IMAGE_LAYOUT = "auto";
+const DEFAULT_IMAGE_LAYOUT = "row";
 
 function applyImageLayout(layout) {
   document.body.classList.toggle("image-layout-row", layout === "row");
-  document.body.classList.toggle("image-layout-auto", layout === "auto");
   $$(".layout-btn").forEach(b => b.classList.toggle("active", b.dataset.layout === layout));
 }
 
@@ -549,7 +542,7 @@ applyBadgeColor(localStorage.getItem(BADGE_COLOR_KEY) || DEFAULT_BADGE_COLOR);
 applyBadgeShape(localStorage.getItem(BADGE_SHAPE_KEY) || DEFAULT_BADGE_SHAPE);
 applyFontScale(Number(localStorage.getItem(FONT_SCALE_KEY)) || DEFAULT_FONT_SCALE);
 applyCalloutScale(Number(localStorage.getItem(CALLOUT_SCALE_KEY)) || DEFAULT_CALLOUT_SCALE);
-applyImageLayout(localStorage.getItem(IMAGE_LAYOUT_KEY) || DEFAULT_IMAGE_LAYOUT);
+applyImageLayout(localStorage.getItem(IMAGE_LAYOUT_KEY) === "stack" ? "stack" : DEFAULT_IMAGE_LAYOUT);
 
 $("#customizeBtn").onclick = () => { $("#customizePanel").hidden = !$("#customizePanel").hidden; };
 document.addEventListener("click", e => {
