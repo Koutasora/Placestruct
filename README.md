@@ -1,6 +1,8 @@
 # Placestruct
 
-Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych do druku (podgląd A4). 
+Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych do druku (podgląd A4).
+
+🔗 **Strona online:** https://koutasora.github.io/Placestruct/
 
 ## Funkcje
 
@@ -13,7 +15,7 @@ Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych 
 - dowolna liczba zdjęć na krok — dodawanie przez przycisk, przeciągnięcie pliku albo wklejenie ze schowka (Ctrl+V) w dowolnym miejscu danego kroku,
 - każde zdjęcie ma własny podpis i suwak rozmiaru (20–100%),
 - zmiana kolejności zdjęć w obrębie kroku,
-- układ wielu zdjęć do wyboru: jedno pod drugim albo obok siebie (siatka, maks. 3 w rzędzie, dopasowuje się do liczby zdjęć).
+- układ wielu zdjęć do wyboru: **automatyczny** (domyślny — siatka 3-kolumnowa, małe zdjęcia do 33% układają się po 3 w rzędzie, średnie po 2, duże zajmują cały rząd), jedno pod drugim albo obok siebie (maks. 3 w rzędzie).
 
 **Wyróżnienia**
 - dowolna liczba wskazówek / uwag / informacji / ważnych na krok, każde z własnym typem i treścią.
@@ -33,7 +35,7 @@ Mały, w pełni lokalny generator czytelnych instrukcji krok po kroku, gotowych 
 - kolor i kształt numerków kroków (9 kształtów: kwadrat, zaokrąglony, koło, diament, sześciokąt, pięciokąt, ośmiokąt, gwiazda, trójkąt),
 - rozmiar czcionki dokumentu,
 - rozmiar wskazówek,
-- układ wielu zdjęć (domyślny),
+- układ wielu zdjęć (automatyczny / jedno pod drugim / obok siebie),
 - tryb jasny / ciemny.
 
 **Dane**
