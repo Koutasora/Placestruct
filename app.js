@@ -24,6 +24,14 @@ const starter = [
   }
 ];
 
+// Row layout on a 6-column grid: full rows hold 3 images (span 2 each),
+// the last partial row stretches (1 image -> span 6, 2 images -> span 3 each)
+function imageSpan(index, count) {
+  const rem = count % 3;
+  if (rem && index >= count - rem) return rem === 1 ? 6 : 3;
+  return 2;
+}
+
 function addStep(data={title:"", text:"", images:[], callouts:[]}) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.dataset.id = ++stepId;
@@ -206,7 +214,7 @@ function buildDocHtml(d, opts = {}) {
         <h4>${esc(s.title || "Bez tytułu")}</h4>
       </div>
       ${s.text ? `<div class="preview-text">${s.text}</div>` : ""}
-      ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map(img => `<figure class="preview-image"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
+      ${(s.images && s.images.length) ? `<div class="step-images" style="--img-cols:${Math.min(s.images.length, 3)}">${s.images.map((img, i) => `<figure class="preview-image" style="--img-span:${imageSpan(i, s.images.length)}"><img src="${img.src}" alt="" style="width:${img.scale || 100}%">${img.caption ? `<figcaption class="image-caption">${esc(img.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
       ${(s.callouts || []).filter(c => c.text).map(calloutHtml).join("")}
     </section>`;
   });
